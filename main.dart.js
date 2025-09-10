@@ -50143,7 +50143,7 @@ kQ(){var s=0,r=A.V(t.H),q,p=this,o
 var $async$kQ=A.W(function(a,b){if(a===1)return A.S(b,r)
 while(true)switch(s){case 0:s=3
 return A.a_(p.mJ(),$async$kQ)
-case 3:A.eJ("5")
+case 3:A.eJ("6")
 if(!p.e){A.vm().$1("This browser/device can't use Google Pay.")
 s=1
 break}o=new A.ak($.a5,t.D)
