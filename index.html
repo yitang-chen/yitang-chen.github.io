@@ -34,6 +34,8 @@
     };
 
     TPDirect.googlePay.setupPaymentRequest(paymentRequest, function (err, result) {
+      console.log("Google Pay check err:", err);
+      console.log("Google Pay check result:", result);
       if (result.canUseGooglePay) {
         TPDirect.googlePay.setupGooglePayButton({
           el: document.createElement('div'), // 不插入 UI
