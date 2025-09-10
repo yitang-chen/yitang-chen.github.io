@@ -4,19 +4,54 @@
   <!-- TapPay TPDirect JS SDK -->
   <script src="https://pay.google.com/gp/p/js/pay.js"></script>
   <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.19.1"></script>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+  <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.18.0"></script>
+<script>
+  function triggerGooglePay() {
+    TPDirect.setupSDK(
+      163839,
+      'app_BsGYXMKSjUKE4E4ZvIushCI2nTtP9PSbfzsh2IJmLD2lF7O1Aq1EI8379naC',
+      'sandbox'
+    );
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+    const googlePaySetting = {
+      googleMerchantId: "Come from google portal",
+      tappayGoogleMerchantId: "Come from tappay portal",
+      allowedCardAuthMethods: ["PAN_ONLY", "CRYPTOGRAM_3DS"],
+      merchantName: "TapPay Test!",
+      emailRequired: true,
+      shippingAddressRequired: true,
+      billingAddressRequired: true,
+      billingAddressFormat: "MIN",
+      allowPrepaidCards: true,
+      allowedCountryCodes: ['TW'],
+      phoneNumberRequired: true
+    };
+    TPDirect.googlePay.setupGooglePay(googlePaySetting);
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+    const paymentRequest = {
+      allowedNetworks: ["AMEX", "JCB", "MASTERCARD", "VISA"],
+      price: "123",
+      currency: "TWD"
+    };
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
+    TPDirect.googlePay.setupPaymentRequest(paymentRequest, function (err, result) {
+      if (result.canUseGooglePay) {
+        TPDirect.googlePay.setupGooglePayButton({
+          el: document.createElement('div'), // 不插入 UI
+          color: "black",
+          type: "long",
+          getPrimeCallback: function (err, prime) {
+            console.log("Prime:", prime);
+            alert("Prime: " + prime);
+          }
+        }).click(); // 直接觸發 click
+      } else {
+        alert("Google Pay not available");
+      }
+    });
+  }
+</script>
+
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
