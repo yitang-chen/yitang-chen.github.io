@@ -56,98 +56,57 @@
 <script>
   (function () {
     window.triggerGooglePay = function () {
-      try {
-        console.log('[GPay] trigger called');
+      console.log('[GPay] trigger called');
 
-        if (!window.TPDirect) {
-          console.error('[GPay] TPDirect not loaded');
-          alert('TPDirect not loaded (check script src)');
-          return;
-        }
+      TPDirect.setupSDK(
+        11327,
+        'app_whdEWBH8e8Lzy4N6BysVRRMILYORF6UxXbiOFsICkz0J9j1C0JUlCHv1tVJC',
+        'sandbox'
+      );
 
-        TPDirect.setupSDK(
-          11327,
-          'app_whdEWBH8e8Lzy4N6BysVRRMILYORF6UxXbiOFsICkz0J9j1C0JUlCHv1tVJC',
-          'sandbox'
-        );
-        console.log('[GPay] setupSDK done');
+      const googlePaySetting = {
+        googleMerchantId: "Come from google portal",
+        tappayGoogleMerchantId: "Come from tappay portal",
+        allowedCardAuthMethods: ["PAN_ONLY", "CRYPTOGRAM_3DS"],
+        merchantName: "TapPay Test!",
+        emailRequired: true,
+        shippingAddressRequired: true,
+        billingAddressRequired: true,
+        billingAddressFormat: "MIN",
+        allowPrepaidCards: true,
+        allowedCountryCodes: ['TW'],
+        phoneNumberRequired: true
+      };
+      TPDirect.googlePay.setupGooglePay(googlePaySetting);
 
-        const googlePaySetting = {
-          googleMerchantId: 'Come from google portal',
-          tappayGoogleMerchantId: 'Come from tappay portal',
-          allowedCardAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-          merchantName: 'TapPay Test!',
-          emailRequired: true,
-          shippingAddressRequired: true,
-          billingAddressRequired: true,
-          billingAddressFormat: 'MIN',
-          allowPrepaidCards: true,
-          allowedCountryCodes: ['TW'],
-          phoneNumberRequired: true,
-        };
-        TPDirect.googlePay.setupGooglePay(googlePaySetting);
-        console.log('[GPay] setupGooglePay done');
+      const paymentRequest = {
+        allowedNetworks: ["AMEX", "JCB", "MASTERCARD", "VISA"],
+        price: "123",
+        currency: "TWD"
+      };
 
-        const paymentRequest = {
-          allowedNetworks: ['AMEX', 'JCB', 'MASTERCARD', 'VISA'],
-          price: '123',
-          currency: 'TWD',
-        };
+      TPDirect.googlePay.setupPaymentRequest(paymentRequest, function (err, result) {
+        console.log("[GPay] setupPaymentRequest -> err:", err);
+        console.log("[GPay] setupPaymentRequest -> result:", result);
 
-        TPDirect.googlePay.setupPaymentRequest(paymentRequest, function (err, result) {
-          console.log('[GPay] setupPaymentRequest callback -> err:', err);
-          console.log('[GPay] setupPaymentRequest callback -> result:', result);
+        if (result && result.canUseGooglePay) {
+          console.log("[GPay] canUseGooglePay = true, calling getPrime...");
 
-          if (err) {
-            console.error('[GPay] setupPaymentRequest error:', err);
-            alert('setupPaymentRequest error: ' + JSON.stringify(err));
-            return;
-          }
+          TPDirect.googlePay.getPrime(function (err, prime, payload) {
+            console.log("[GPay] getPrime err:", err);
+            console.log("[GPay] getPrime prime:", prime);
+            console.log("[GPay] getPrime payload:", payload);
 
-          if (result && result.canUseGooglePay) {
-            // 建一個容器放在 body（避免 el 是孤兒節點）
-            const el = document.createElement('div');
-            el.id = 'gpay-btn-container-' + Date.now();
-            document.body.appendChild(el);
-
-            TPDirect.googlePay.setupGooglePayButton({
-              el: el,
-              color: 'black',
-              type: 'long',
-              getPrimeCallback: function (err, prime) {
-                console.log('[GPay] getPrime err:', err);
-                console.log('[GPay] getPrime prime:', prime);
-                if (err) {
-                  alert('getPrime error: ' + JSON.stringify(err));
-                } else {
-                  alert('Prime: ' + prime);
-                }
-              },
-            });
-
-            // **注意**：部分環境要求「使用者手勢」才能開啟支付視窗
-            // 如果你是從 Flutter 的 onPressed 呼叫這個 function，算是使用者手勢
-            // 但主動 .click() 可能會被瀏覽器擋，先嘗試一次：
-            try {
-              const btn = el.querySelector('button');
-              if (btn) {
-                console.log('[GPay] auto click gpay button');
-                btn.click();
-              } else {
-                console.warn('[GPay] gpay button not found inside container');
-              }
-            } catch (e) {
-              console.warn('[GPay] auto click failed (likely user-gesture required):', e);
+            if (err) {
+              alert("getPrime error: " + JSON.stringify(err));
+              return;
             }
-          } else {
-            console.warn('[GPay] Google Pay not available. result =', result);
-            alert('Google Pay not available: ' + JSON.stringify(result || {}));
-          }
-        });
-      } catch (e) {
-        console.error('[GPay] exception:', e);
-        alert('Exception: ' + (e && e.message ? e.message : e));
-      }
+            alert("Prime: " + prime);
+          });
+        } else {
+          alert("Google Pay not available");
+        }
+      });
     };
   })();
 </script>
