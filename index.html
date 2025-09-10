@@ -3,7 +3,7 @@
 <head>
   <!-- TapPay TPDirect JS SDK -->
   <script src="https://pay.google.com/gp/p/js/pay.js"></script>
-  <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.19.1"></script>
+  <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.19.2"></script>
 <!-- <script>
   function triggerGooglePay() {
     TPDirect.setupSDK(
@@ -53,7 +53,24 @@
   }
 </script> -->
 
-<script>
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="tap_pay_poc">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>tap_pay_poc</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <script>
   (function () {
     window.triggerGooglePay = function () {
       console.log('[GPay] trigger called');
@@ -110,24 +127,6 @@
     };
   })();
 </script>
-
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
-
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="tap_pay_poc">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-
-  <title>tap_pay_poc</title>
-  <link rel="manifest" href="manifest.json">
-</head>
-<body>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
